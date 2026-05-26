@@ -1,0 +1,61 @@
+### Use with the VS Code "REST Client" extension (humao.rest-client)
+### Click "Send Request" above each ### block
+
+@host = http://localhost:4000
+@email = demo@gym.com
+@password = demo123
+
+### 1. Health check
+GET {{host}}/api/health
+
+### 2. Register a new user
+POST {{host}}/api/register
+Content-Type: application/json
+
+{
+  "email": "newuser@example.com",
+  "password": "secret123",
+  "name": "New User"
+}
+
+### 3. Login (copy the token from the response below)
+# @name login
+POST {{host}}/api/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+###
+@token = {{login.response.body.token}}
+
+### 4. Get current user
+GET {{host}}/api/me
+Authorization: Bearer {{token}}
+
+### 5. Get your gym state
+GET {{host}}/api/state
+Authorization: Bearer {{token}}
+
+### 6. Update your gym state (example: add a goal)
+PUT {{host}}/api/state
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "data": {
+    "exercises": [],
+    "schedule": [],
+    "logs": [],
+    "metrics": [],
+    "goals": [
+      { "id": "abc123", "title": "Test goal from REST", "target": "100kg", "done": false }
+    ]
+  }
+}
+
+### 7. Delete account (careful!)
+# DELETE {{host}}/api/account
+# Authorization: Bearer {{token}}
