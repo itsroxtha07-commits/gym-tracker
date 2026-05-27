@@ -71,6 +71,13 @@ export const api = {
       method: 'PUT',
       body: JSON.stringify({ data })
     }),
+  changePassword: (currentPassword: string, newPassword: string) =>
+    request<{ ok: true }>('/change-password', {
+      method: 'POST',
+      body: JSON.stringify({ currentPassword, newPassword })
+    }),
+  deleteAccount: () =>
+    request<{ ok: true }>('/account', { method: 'DELETE' }),
 
   // Admin
   adminStats: () => request<AdminStats>('/admin/stats'),

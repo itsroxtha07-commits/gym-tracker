@@ -148,6 +148,19 @@ app.delete('/api/account', auth, (req, res) => {
   res.json({ ok: true });
 });
 
+app.post('/api/change-password', auth, (req, res) => {
+  const { currentPassword, newPassword } = req.body || {};
+  if (!newPassword || newPassword.length < 6)
+    return res.status(400).json({ error: 'New password must be at least 6 chars' });
+  const user = findUserById(req.user.id);
+  if (!user) return res.status(404).json({ error: 'User not found' });
+  if (!bcrypt.compareSync(currentPassword || '', user.password_hash))
+    return res.status(401).json({ error: 'Current password is incorrect' });
+  user.password_hash = bcrypt.hashSync(newPassword, 10);
+  persist();
+  res.json({ ok: true });
+});
+
 // ───────────────────────── Admin Routes ─────────────────────────
 app.get('/api/admin/users', auth, requireAdmin, (_req, res) => {
   const users = db.users.map(u => {

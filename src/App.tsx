@@ -11,8 +11,9 @@ import History from './components/History';
 import Metrics from './components/Metrics';
 import Goals from './components/Goals';
 import Admin from './components/Admin';
+import Profile from './components/Profile';
 
-type Tab = 'dashboard' | 'schedule' | 'exercises' | 'workout' | 'history' | 'metrics' | 'goals' | 'admin';
+type Tab = 'dashboard' | 'schedule' | 'exercises' | 'workout' | 'history' | 'metrics' | 'goals' | 'profile' | 'admin';
 
 const todayName = (): DayOfWeek => {
   const map: DayOfWeek[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -99,6 +100,7 @@ export default function App() {
     { id: 'history', label: 'History', icon: '📜' },
     { id: 'metrics', label: 'Body', icon: '⚖️' },
     { id: 'goals', label: 'Goals', icon: '🎯' },
+    { id: 'profile', label: 'Profile', icon: '👤' },
     ...(user.is_admin ? [{ id: 'admin' as Tab, label: 'Admin', icon: '🛡️' }] : [])
   ];
 
@@ -149,6 +151,7 @@ export default function App() {
         {tab === 'history' && <History state={state} setState={setState} />}
         {tab === 'metrics' && <Metrics state={state} setState={setState} uid={uid} />}
         {tab === 'goals' && <Goals state={state} setState={setState} uid={uid} />}
+        {tab === 'profile' && <Profile user={user} state={state} setState={setState} onLogout={logout} />}
         {tab === 'admin' && user.is_admin && <Admin currentUser={user} />}
       </main>
 
