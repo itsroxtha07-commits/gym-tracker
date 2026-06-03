@@ -1,0 +1,9 @@
+server
+node_modules
+.git
+.env
+.env.local
+*.log
+README.md
+DEPLOY.md
+render.yaml
