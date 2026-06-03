@@ -12,6 +12,7 @@ export default function Login({ onAuth }: Props) {
   const [name, setName] = useState('');
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [showForgot, setShowForgot] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,7 +72,7 @@ export default function Login({ onAuth }: Props) {
           </button>
         </form>
 
-        <div style={{ textAlign: 'center', marginTop: 12 }}>
+        <div style={{ textAlign: 'center', marginTop: 12, display: 'flex', flexDirection: 'column', gap: 6 }}>
           <button
             className="ghost small"
             type="button"
@@ -81,7 +82,39 @@ export default function Login({ onAuth }: Props) {
               ? "Don't have an account? Sign up"
               : 'Already have an account? Log in'}
           </button>
+          {mode === 'login' && (
+            <button className="ghost small" type="button" onClick={() => setShowForgot(true)}>
+              Forgot password?
+            </button>
+          )}
         </div>
+
+        {showForgot && (
+          <div className="modal-backdrop" onClick={() => setShowForgot(false)}>
+            <div className="modal card" onClick={e => e.stopPropagation()} style={{ maxWidth: 460 }}>
+              <div className="card-header">
+                <h3>🔑 Forgot Password</h3>
+                <button className="ghost small" onClick={() => setShowForgot(false)}>✕</button>
+              </div>
+              <p>Since this is a private gym tracker, password resets are handled by the admin.</p>
+              <ol className="muted" style={{ paddingLeft: 20, lineHeight: 1.8 }}>
+                <li>Email the admin: <b>its.roxtha07@gmail.com</b></li>
+                <li>Include the email address you signed up with</li>
+                <li>Admin will reply with a temporary password</li>
+                <li>Log in with it, then go to <b>Profile → Change Password</b> to set a new one</li>
+              </ol>
+              <div style={{ marginTop: 12 }}>
+                <a
+                  href="mailto:its.roxtha07@gmail.com?subject=Gym Tracker - Password Reset Request&body=Hi, please reset the password for my account. My email is: "
+                  className="primary"
+                  style={{ display: 'inline-block', padding: '8px 14px', borderRadius: 8, textDecoration: 'none', color: 'white' }}
+                >
+                  📧 Email Admin
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

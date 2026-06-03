@@ -87,5 +87,7 @@ export const api = {
   adminDeleteUser: (id: number) =>
     request<{ ok: true }>(`/admin/users/${id}`, { method: 'DELETE' }),
   adminToggleAdmin: (id: number) =>
-    request<{ ok: true; user: User }>(`/admin/users/${id}/toggle-admin`, { method: 'POST' })
+    request<{ ok: true; user: User }>(`/admin/users/${id}/toggle-admin`, { method: 'POST' }),
+  adminResetPassword: (id: number) =>
+    request<{ ok: true; tempPassword: string; email: string }>(`/admin/users/${id}/reset-password`, { method: 'POST' })
 };

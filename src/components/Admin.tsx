@@ -60,6 +60,20 @@ export default function Admin({ currentUser }: Props) {
     }
   };
 
+  const resetPassword = async (u: AdminUserRow) => {
+    if (!confirm(`Reset password for ${u.email}?\n\nA new temporary password will be generated. Share it with the user securely.`)) return;
+    try {
+      const res = await api.adminResetPassword(u.id);
+      // Use prompt() so user can easily copy the password
+      window.prompt(
+        `✓ Password reset for ${res.email}\n\nTemporary password (copy now — it won't be shown again):`,
+        res.tempPassword
+      );
+    } catch (e: any) {
+      alert(e.message);
+    }
+  };
+
   if (loading) return <div className="card"><p className="muted">Loading admin data…</p></div>;
   if (err) return <div className="card"><p className="auth-error">⚠ {err}</p></div>;
 
@@ -122,6 +136,7 @@ export default function Admin({ currentUser }: Props) {
                 <button className="ghost small" onClick={() => viewUser(u.id)}>View</button>
                 {u.id !== currentUser.id && (
                   <>
+                    <button className="ghost small" onClick={() => resetPassword(u)} title="Reset password">🔑</button>
                     <button className="ghost small" onClick={() => toggleAdmin(u)}>
                       {u.is_admin ? 'Revoke' : 'Promote'}
                     </button>

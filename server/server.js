@@ -207,6 +207,17 @@ app.post('/api/admin/users/:id/toggle-admin', auth, requireAdmin, (req, res) => 
   res.json({ ok: true, user: publicUser(user) });
 });
 
+app.post('/api/admin/users/:id/reset-password', auth, requireAdmin, (req, res) => {
+  const id = +req.params.id;
+  const user = findUserById(id);
+  if (!user) return res.status(404).json({ error: 'User not found' });
+  // Generate a memorable 12-char temporary password
+  const tempPassword = Math.random().toString(36).slice(2, 8) + Math.random().toString(36).slice(2, 8);
+  user.password_hash = bcrypt.hashSync(tempPassword, 10);
+  persist();
+  res.json({ ok: true, tempPassword, email: user.email });
+});
+
 app.get('/api/admin/stats', auth, requireAdmin, (_req, res) => {
   const totalUsers = db.users.length;
   const totalAdmins = db.users.filter(u => u.is_admin).length;
